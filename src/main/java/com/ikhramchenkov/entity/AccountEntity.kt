@@ -1,22 +1,27 @@
 package com.ikhramchenkov.entity
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
+import javax.persistence.*
 import javax.persistence.GenerationType.IDENTITY
-import javax.persistence.Id
-import javax.persistence.Table
 
-@Table(name = "accounts")
+@Table(
+    name = "accounts",
+    indexes = [Index(columnList = "account_number")]
+)
 @Entity
 class AccountEntity(
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private val id: Long? = null,
+    var id: Long? = null,
 
-    private val accountNumber: Long? = null,
+    @Column(name = "account_number")
+    var accountNumber: Long? = null,
 
-    private val ownerId: Long? = null
+    @Column(name = "owner_id")
+    var ownerId: Long? = null,
+
+    @Column(name = "account_type")
+    var accountType: String? = null
 
 )
 
