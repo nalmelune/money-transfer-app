@@ -19,6 +19,9 @@ class AccountsResource {
     @Inject
     private lateinit var accountsService: AccountsService
 
+    /**
+     * Let's assume user never has too many accounts to load, so pagination is not required
+     */
     @GET
     @UnitOfWork(transactional = false)
     fun allAvailableAccounts(): Response {
