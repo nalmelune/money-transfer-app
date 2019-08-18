@@ -19,12 +19,6 @@ class TransferOwnResource {
     @Inject
     private lateinit var accountsService: AccountsService
 
-    @Inject
-    private lateinit var balanceMovementService: BalanceMovementService
-
-    @Inject
-    private lateinit var monthlyBalanceService: MonthlyBalanceService
-
     @POST
     @Path("/transfer/{from}/{to}")
     @UnitOfWork
