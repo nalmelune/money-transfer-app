@@ -6,10 +6,10 @@ import javax.persistence.GenerationType.IDENTITY
 
 @Entity
 @Table(
-    name = "monthly_balance",
-    indexes = [Index(columnList = "account_number")]
+    name = "closing_balance",
+    indexes = [Index(columnList = "account_number,publish_date")]
 )
-class MonthlyBalance(
+class ClosingBalance(
     @Id
     @GeneratedValue(strategy = IDENTITY)
     var id: Long? = null,
@@ -20,10 +20,13 @@ class MonthlyBalance(
     @Column(name = "publish_date")
     var publishDate: LocalDate? = null,
 
-    var endOfTheMonthBalance: Long? = null,
+    @Column(name = "end_of_period_balance")
+    var endOfPeriodBalance: Long? = null,
 
-    var summaryMonthDebit: Long? = null,
+    @Column(name = "summary_period_debit")
+    var summaryPeriodDebit: Long? = null,
 
-    var summaryMonthCredit: Long? = null
+    @Column(name = "summary_period_credit")
+    var summaryPeriodCredit: Long? = null
 
 )

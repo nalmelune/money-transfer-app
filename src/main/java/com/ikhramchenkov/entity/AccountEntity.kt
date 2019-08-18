@@ -15,7 +15,7 @@ class AccountEntity(
     var id: Long? = null,
 
     @Column(name = "account_number")
-    var accountNumber: Long? = null,
+    var accountNumber: String? = null,
 
     @Column(name = "owner_id")
     var ownerId: Long? = null,
