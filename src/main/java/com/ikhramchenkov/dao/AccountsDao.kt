@@ -14,7 +14,7 @@ class AccountsDao(sessionFactory: SessionFactory) : AbstractDAO<AccountEntity>(s
 
     fun findByNumber(accountNumber: String): AccountEntity? {
         val query = criteriaQuery()
-        query.from(AccountEntity::class.java).let { root ->
+        query.from(entityClass).let { root ->
             query.select(root).where(root.accountNumberEquals(accountNumber))
         }
         return currentSession().createQuery(query).singleResult
