@@ -55,14 +55,15 @@ class TransferOwnResource {
         // Let's assume here should be implementation for identification of owner
         if (accountFrom.ownerId != transferRequest.initiatorId) throw AttemptToUseStrangersAccountException()
 
-        // 4 check "from" has enough balance
+        // 4 lock "from" and "to" on db ordering locks by number
+        sortedMapOfAccounts(accountFrom, accountTo).forEach {
+            accountsService.lock(it.value)
+        }
+
+        // 5 check "from" has enough balance
         val balance: Long = balanceService.getAccountBalance(accountFrom.accountNumber!!)
         if (balance < transferRequest.amount) {
             throw InsufficientFundsException()
-        }
-        // 5 lock "from" and "to" on db ordering locks by number
-        sortedMapOfAccounts(accountFrom, accountTo).forEach {
-            accountsService.lock(it.value)
         }
 
         // 6 "append" the movements to db
