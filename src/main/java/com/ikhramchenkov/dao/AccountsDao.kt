@@ -3,6 +3,7 @@ package com.ikhramchenkov.dao
 import com.google.inject.Singleton
 import com.ikhramchenkov.entity.AccountEntity
 import io.dropwizard.hibernate.AbstractDAO
+import org.hibernate.LockMode.PESSIMISTIC_WRITE
 import org.hibernate.SessionFactory
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.Root
@@ -18,6 +19,10 @@ class AccountsDao(sessionFactory: SessionFactory) : AbstractDAO<AccountEntity>(s
             query.select(root).where(root.accountNumberEquals(accountNumber))
         }
         return currentSession().createQuery(query).singleResult
+    }
+
+    fun lock(accountEntity: AccountEntity) {
+        currentSession().lock(accountEntity, PESSIMISTIC_WRITE)
     }
 
     private fun <T> Root<T>.accountNumberEquals(

@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.persistence.EnumType.STRING
+import javax.persistence.GenerationType.IDENTITY
 
 @Entity
 @Table(
@@ -17,17 +18,21 @@ import javax.persistence.EnumType.STRING
 class BalanceMovement(
 
     @Id
-    var uuid: UUID? = null,
+    @GeneratedValue(strategy = IDENTITY)
+    var id: Long? = null,
 
     @Column(name = "account_number")
-    var accountNumber: Long? = null,
+    var accountNumber: String? = null,
 
     @Column(name = "amount")
     var amount: Long? = null,
 
     @Column(name = "transaction_type")
     @Enumerated(STRING)
-    var transactionType: TransactionType,
+    var transactionType: TransactionType? = null,
+
+    @Column(name = "operation_number")
+    var operationNumber: UUID? = null,
 
     @Column(name = "created_at")
     var createdAt: LocalDateTime? = null

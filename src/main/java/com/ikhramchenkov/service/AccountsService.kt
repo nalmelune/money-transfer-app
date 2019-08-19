@@ -19,4 +19,8 @@ class AccountsService {
     fun findByNumberOrThrow(accountNumber: String) =
         accountsDao.findByNumber(accountNumber) ?: throw AccountNotFoundException(accountNumber);
 
+    fun lock(accountEntity: AccountEntity) {
+        accountsDao.lock(accountEntity)
+    }
+
 }

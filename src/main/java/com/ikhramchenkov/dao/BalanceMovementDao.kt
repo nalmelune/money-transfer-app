@@ -15,12 +15,14 @@ import com.ikhramchenkov.enumeration.TransactionType.W as WITHDRAWAL
 @Singleton
 class BalanceMovementDao(sessionFactory: SessionFactory) : AbstractDAO<BalanceMovement>(sessionFactory) {
 
-    fun getDebitSince(accountNumber: String, dateSince: LocalDate): Long {
-        return getByAccountNumberAndDateSinceAndTransactionType(accountNumber, dateSince, DEPOSIT)
-    }
+    fun getDebitSince(accountNumber: String, dateSince: LocalDate): Long =
+        getByAccountNumberAndDateSinceAndTransactionType(accountNumber, dateSince, DEPOSIT)
 
-    fun getCreditSince(accountNumber: String, dateSince: LocalDate): Long {
-        return getByAccountNumberAndDateSinceAndTransactionType(accountNumber, dateSince, WITHDRAWAL)
+    fun getCreditSince(accountNumber: String, dateSince: LocalDate): Long =
+        getByAccountNumberAndDateSinceAndTransactionType(accountNumber, dateSince, WITHDRAWAL)
+
+    fun save(balanceMovement: BalanceMovement): BalanceMovement {
+        return persist(balanceMovement)
     }
 
     private fun getByAccountNumberAndDateSinceAndTransactionType(
