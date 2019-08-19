@@ -5,7 +5,8 @@ import javax.persistence.GenerationType.IDENTITY
 
 @Table(
     name = "accounts",
-    indexes = [Index(columnList = "account_number")]
+    indexes = [Index(columnList = "account_number"),
+        Index(columnList = "owner_id")]
 )
 @Entity
 class AccountEntity(
@@ -21,7 +22,9 @@ class AccountEntity(
     var ownerId: Long? = null,
 
     @Column(name = "account_type")
-    var accountType: String? = null
+    var accountType: String? = null,
 
+    @Column(name = "description")
+    var description: String? = null
 )
 

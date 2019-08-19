@@ -1,13 +1,13 @@
 package com.ikhramchenkov.api
 
 import com.google.inject.Inject
-import com.ikhramchenkov.dto.BalanceDto
+import com.ikhramchenkov.dto.AccountInfoDto
+import com.ikhramchenkov.entity.AccountEntity
+import com.ikhramchenkov.exception.AttemptToUseStrangersAccountException
 import com.ikhramchenkov.service.AccountsService
+import com.ikhramchenkov.service.BalanceService
 import io.dropwizard.hibernate.UnitOfWork
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.Response.Status.*
@@ -19,37 +19,46 @@ class AccountsResource {
     @Inject
     private lateinit var accountsService: AccountsService
 
+    @Inject
+    private lateinit var balanceService: BalanceService
+
     /**
      * Let's assume user never has too many accounts to load, so pagination is not required
      */
     @GET
     @UnitOfWork(transactional = false)
-    fun allAvailableAccounts(): Response {
-        val findById = accountsService.findById(1)
+    fun allAvailableAccounts(@QueryParam("ownerId") ownerId: Long?): Response {
+        // let's pretend it's our implementation of authentication
+        if (ownerId == null) throw BadRequestException("ownerId is not set")
 
-        Response.status(FORBIDDEN).build()
-        return Response.status(OK).entity(BalanceDto("43213412313123413", 34562L)).build();
+        val accountInfoDTOs = accountsService.findByOwner(ownerId).map { account ->
+            toAccountInfoDto(account, balanceService.getAccountBalance(account.accountNumber!!))
+        }
+
+        return Response.status(OK).entity(accountInfoDTOs).build();
     }
 
     // Get more account details
     @GET
     @Path("/{number}")
-    fun accountDetails(@PathParam("number") number: String): Response {
-        Response.status(FORBIDDEN).build()
-        Response.status(BAD_REQUEST).build()
-        Response.status(NOT_FOUND).build()
-        return Response.status(OK).entity(BalanceDto("43213412313123413", 34562L)).build();
+    fun accountDetails(
+        @PathParam("number") accountNumber: String,
+        @QueryParam("ownerId") ownerId: Long?
+    ): Response {
+        // let's pretend it's our implementation of authentication
+        if (ownerId == null) throw BadRequestException("ownerId is not set")
+
+        val accountInfoDto = accountsService.findByNumberOrThrow(accountNumber).let { account ->
+            if (ownerId != account.ownerId) throw AttemptToUseStrangersAccountException()
+
+            toAccountInfoDto(account, balanceService.getAccountBalance(account.accountNumber!!))
+        }
+
+        return Response.status(OK).entity(accountInfoDto).build();
     }
 
-    @GET
-    @Path("/{number}/balance")
-    fun balance(@PathParam("number") number: String): Response {
-        Response.status(FORBIDDEN).build()
-        Response.status(BAD_REQUEST).build()
-        Response.status(NOT_FOUND).build()
-
-        return Response.status(OK)
-            .entity(BalanceDto("43213412313123413", 34562L))
-            .build()
-    }
+    private fun toAccountInfoDto(
+        account: AccountEntity,
+        balance: Long
+    ) = AccountInfoDto(account.accountNumber!!, account.accountType!!, account.description!!, balance)
 }

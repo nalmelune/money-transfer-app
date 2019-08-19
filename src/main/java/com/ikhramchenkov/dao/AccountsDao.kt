@@ -11,7 +11,13 @@ import javax.persistence.criteria.Root
 @Singleton
 class AccountsDao(sessionFactory: SessionFactory) : AbstractDAO<AccountEntity>(sessionFactory) {
 
-    fun findById(id: Long): AccountEntity? = get(id)
+    fun findByOwner(ownerId: Long): List<AccountEntity> {
+        val query = criteriaQuery()
+        query.from(entityClass).let { root ->
+            query.select(root).where(root.ownerIdEquals(ownerId))
+        }
+        return currentSession().createQuery(query).resultList
+    }
 
     fun findByNumber(accountNumber: String): AccountEntity? {
         val query = criteriaQuery()
@@ -24,6 +30,10 @@ class AccountsDao(sessionFactory: SessionFactory) : AbstractDAO<AccountEntity>(s
     fun lock(accountEntity: AccountEntity) {
         currentSession().lock(accountEntity, PESSIMISTIC_WRITE)
     }
+
+    private fun <T> Root<T>.ownerIdEquals(
+        ownerId: Long
+    ) = criteriaBuilder.equal(get<T>("ownerId"), ownerId)
 
     private fun <T> Root<T>.accountNumberEquals(
         accountNumber: String
