@@ -10,17 +10,14 @@ import io.dropwizard.hibernate.UnitOfWork
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
-import javax.ws.rs.core.Response.Status.*
+import javax.ws.rs.core.Response.Status.OK
 
 @Path("/accounts")
 @Produces(APPLICATION_JSON)
-class AccountsResource {
-
-    @Inject
-    private lateinit var accountsService: AccountsService
-
-    @Inject
-    private lateinit var balanceService: BalanceService
+class AccountsResource @Inject constructor(
+    private val accountsService: AccountsService,
+    private val balanceService: BalanceService
+) {
 
     /**
      * Let's assume user never has too many accounts to load, so pagination is not required

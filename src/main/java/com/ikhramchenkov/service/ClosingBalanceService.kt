@@ -8,13 +8,10 @@ import org.jvnet.hk2.annotations.Service
 import java.time.LocalDate.now
 
 @Service
-class ClosingBalanceService {
-
-    @Inject
-    private lateinit var closingBalanceDao: ClosingBalanceDao
-
-    @Inject
-    private lateinit var accountsService: AccountsService
+class ClosingBalanceService @Inject constructor(
+    private val closingBalanceDao: ClosingBalanceDao,
+    private val accountsService: AccountsService
+) {
 
     fun getLastClosingBalance(accountNumber: String): ClosingBalanceDto {
 

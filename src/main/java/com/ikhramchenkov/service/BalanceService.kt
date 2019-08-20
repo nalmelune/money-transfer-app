@@ -5,14 +5,10 @@ import com.google.inject.Singleton
 import com.ikhramchenkov.exception.InsufficientFundsException
 
 @Singleton
-class BalanceService {
-
-    @Inject
-    private lateinit var balanceMovementService: BalanceMovementService
-
-    @Inject
-    private lateinit var closingBalanceService: ClosingBalanceService
-
+class BalanceService @Inject constructor(
+    private val balanceMovementService: BalanceMovementService,
+    private val closingBalanceService: ClosingBalanceService
+) {
     /**
      * Let's assume balance can fit into Long at any economy situation having 2 "cents" digits.
      *

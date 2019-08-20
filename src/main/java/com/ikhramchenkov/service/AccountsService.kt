@@ -8,10 +8,7 @@ import com.ikhramchenkov.utils.sortedMapOfAccounts
 import org.jvnet.hk2.annotations.Service
 
 @Service
-class AccountsService {
-
-    @Inject
-    private lateinit var accountsDao: AccountsDao
+class AccountsService @Inject constructor(private val accountsDao: AccountsDao) {
 
     fun findByOwner(ownerId: Long): List<AccountEntity> = accountsDao.findByOwner(ownerId)
 

@@ -1,5 +1,6 @@
 package com.ikhramchenkov.dao
 
+import com.google.inject.Inject
 import com.google.inject.Singleton
 import com.ikhramchenkov.entity.BalanceMovement
 import com.ikhramchenkov.enumeration.TransactionType
@@ -13,7 +14,8 @@ import com.ikhramchenkov.enumeration.TransactionType.D as DEPOSIT
 import com.ikhramchenkov.enumeration.TransactionType.W as WITHDRAWAL
 
 @Singleton
-class BalanceMovementDao(sessionFactory: SessionFactory) : AbstractDAO<BalanceMovement>(sessionFactory) {
+class BalanceMovementDao @Inject constructor(sessionFactory: SessionFactory) :
+    AbstractDAO<BalanceMovement>(sessionFactory) {
 
     fun getDebitSince(accountNumber: String, dateSince: LocalDate): Long =
         getByAccountNumberAndDateSinceAndTransactionType(accountNumber, dateSince, DEPOSIT)

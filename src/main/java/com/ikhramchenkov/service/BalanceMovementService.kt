@@ -11,10 +11,7 @@ import com.ikhramchenkov.enumeration.TransactionType.D as DEPOSIT
 import com.ikhramchenkov.enumeration.TransactionType.W as WITHDRAWAL
 
 @Service
-class BalanceMovementService {
-
-    @Inject
-    private lateinit var balanceMovementDao: BalanceMovementDao
+class BalanceMovementService @Inject constructor(private val balanceMovementDao: BalanceMovementDao) {
 
     fun getDebitSince(accountNumber: String, dateSince: LocalDate): Long =
         balanceMovementDao.getDebitSince(accountNumber, dateSince)

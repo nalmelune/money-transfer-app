@@ -18,17 +18,11 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.Response.Status.CREATED
 
 @Produces(APPLICATION_JSON)
-class TransferOwnResource {
-
-    @Inject
-    private lateinit var accountsService: AccountsService
-
-    @Inject
-    private lateinit var balanceService: BalanceService
-
-    @Inject
-    private lateinit var balanceMovementService: BalanceMovementService
-
+class TransferOwnResource @Inject constructor(
+    private val accountsService: AccountsService,
+    private val balanceService: BalanceService,
+    private val balanceMovementService: BalanceMovementService
+) {
     @POST
     @Path("/transfer/{from}/{to}")
     @UnitOfWork

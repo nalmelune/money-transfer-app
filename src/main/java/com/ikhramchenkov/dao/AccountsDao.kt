@@ -1,5 +1,6 @@
 package com.ikhramchenkov.dao
 
+import com.google.inject.Inject
 import com.google.inject.Singleton
 import com.ikhramchenkov.entity.AccountEntity
 import io.dropwizard.hibernate.AbstractDAO
@@ -9,7 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.Root
 
 @Singleton
-class AccountsDao(sessionFactory: SessionFactory) : AbstractDAO<AccountEntity>(sessionFactory) {
+class AccountsDao @Inject constructor(sessionFactory: SessionFactory) : AbstractDAO<AccountEntity>(sessionFactory) {
 
     fun findByOwner(ownerId: Long): List<AccountEntity> {
         val query = criteriaQuery()

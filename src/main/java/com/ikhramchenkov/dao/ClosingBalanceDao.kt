@@ -1,5 +1,6 @@
 package com.ikhramchenkov.dao
 
+import com.google.inject.Inject
 import com.google.inject.Singleton
 import com.ikhramchenkov.entity.ClosingBalance
 import io.dropwizard.hibernate.AbstractDAO
@@ -10,7 +11,8 @@ import javax.persistence.criteria.Root
 import javax.persistence.criteria.Subquery
 
 @Singleton
-class ClosingBalanceDao(sessionFactory: SessionFactory) : AbstractDAO<ClosingBalance>(sessionFactory) {
+class ClosingBalanceDao @Inject constructor(sessionFactory: SessionFactory) :
+    AbstractDAO<ClosingBalance>(sessionFactory) {
 
     fun findByAccountNumberAndLatestDate(accountNumber: String): ClosingBalance? {
         val query = criteriaQuery()
