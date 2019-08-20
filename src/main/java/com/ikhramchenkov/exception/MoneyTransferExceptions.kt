@@ -11,3 +11,5 @@ class AttemptToUseStrangersAccountException : ForbiddenException("Attempt to use
 class InsufficientFundsException : ForbiddenException("Insufficient funds")
 
 class SameAccountsInRequestException : BadRequestException("Don't need to transfer between same accounts")
+
+class NoSuchTokenException: NotFoundException("No token to confirm")
