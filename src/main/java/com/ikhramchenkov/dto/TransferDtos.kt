@@ -2,6 +2,11 @@ package com.ikhramchenkov.dto
 
 import java.util.*
 
-class TransferRequest(val amount: Long, val initiatorId: Long)
+data class TransferRequest(
+    val amount: Long,
+    val initiatorId: Long
+)
 
-class TransferResponse(val operationNumber: UUID)
+data class TransferResponse(
+    val operationToken: UUID
+)

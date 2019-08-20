@@ -2,6 +2,7 @@ package com.ikhramchenkov.service
 
 import com.google.inject.Inject
 import com.google.inject.Singleton
+import com.ikhramchenkov.exception.InsufficientFundsException
 
 @Singleton
 class BalanceService {
@@ -25,5 +26,12 @@ class BalanceService {
         val creditSum = balanceMovementService.getCreditSince(accountNumber, lastPeriodBalance.closingDate)
 
         return lastPeriodBalance.balance + debitSum - creditSum;
+    }
+
+    fun checkEnoughBalanceOrThrow(accountNumber: String, requestedAmount: Long) {
+        val balance: Long = getAccountBalance(accountNumber)
+        if (balance < requestedAmount) {
+            throw InsufficientFundsException()
+        }
     }
 }
