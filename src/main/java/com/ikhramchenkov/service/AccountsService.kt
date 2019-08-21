@@ -13,7 +13,8 @@ class AccountsService @Inject constructor(private val accountsDao: AccountsDao) 
     fun findByOwner(ownerId: Long): List<AccountEntity> = accountsDao.findByOwner(ownerId)
 
     fun findByNumberOrThrow(accountNumber: String): AccountEntity =
-        accountsDao.findByNumber(accountNumber) ?: throw AccountNotFoundException(accountNumber);
+        accountsDao.findByNumber(accountNumber)
+            ?: throw AccountNotFoundException(accountNumber);
 
     fun lock(accountFrom: AccountEntity, accountTo: AccountEntity) {
         sortedMapOfAccounts(accountFrom, accountTo).forEach {

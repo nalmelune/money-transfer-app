@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.Response.Status.CREATED
 
 @Produces(APPLICATION_JSON)
+@Path("/")
 class TransferOwnResource @Inject constructor(
     private val accountsService: AccountsService,
     private val balanceService: BalanceService,
@@ -31,7 +32,8 @@ class TransferOwnResource @Inject constructor(
         @PathParam("to") to: String,
         transferRequest: TransferRequest
     ): Response {
-        if (from == to) throw SameAccountsInRequestException()
+        if (from == to)
+            throw SameAccountsInRequestException()
         // 1.1 check "from" exists
         val accountFrom = accountsService.findByNumberOrThrow(from)
 
@@ -40,14 +42,16 @@ class TransferOwnResource @Inject constructor(
 
         // 3 check owner is initiator
         // Let's assume here should be implementation for identification of owner
-        if (accountFrom.ownerId != transferRequest.initiatorId) throw AttemptToUseStrangersAccountException()
-        if (accountTo.ownerId != transferRequest.initiatorId) throw AttemptToUseStrangersAccountException()
+        if (accountFrom.ownerId != transferRequest.initiatorId)
+            throw AttemptToUseStrangersAccountException()
+        if (accountTo.ownerId != transferRequest.initiatorId)
+            throw AttemptToUseStrangersAccountException()
 
         // 4 lock "from" and "to" on db ordering locks by number
         accountsService.lock(accountFrom, accountTo)
 
         // 5 check "from" has enough balance
-        balanceService.checkEnoughBalanceOrThrow(accountFrom.accountNumber!!, transferRequest.amount)
+        balanceService.checkEnoughBalanceOrThrow(accountFrom.accountNumber!!, transferRequest.amount!!)
 
         // 6 "append" the movements to db
         val operationToken = balanceMovementService.saveMovementsBetweenAccounts(from, to, transferRequest.amount)

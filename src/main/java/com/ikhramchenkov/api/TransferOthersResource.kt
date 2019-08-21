@@ -22,20 +22,12 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.Response.Status.CREATED
 
 @Produces(APPLICATION_JSON)
-class TransferOthersResource {
-
-    @Inject
-    private lateinit var accountsService: AccountsService
-
-    @Inject
-    private lateinit var balanceService: BalanceService
-
-    @Inject
-    private lateinit var balanceMovementService: BalanceMovementService
-
-    @Inject
-    private lateinit var operationTokenService: OperationTokenService
-
+class TransferOthersResource @Inject constructor(
+    private var accountsService: AccountsService,
+    private var balanceService: BalanceService,
+    private var balanceMovementService: BalanceMovementService,
+    private var operationTokenService: OperationTokenService
+) {
     @POST
     @Path("/reserve")
     @UnitOfWork
@@ -46,7 +38,8 @@ class TransferOthersResource {
         val accountTo = accountsService.findByNumberOrThrow(request.accountNumberTo)
 
         // Let's assume here should be implementation for identification of owner
-        if (accountFrom.ownerId != request.ownerId) throw AttemptToUseStrangersAccountException()
+        if (accountFrom.ownerId != request.ownerId)
+            throw AttemptToUseStrangersAccountException()
 
         accountsService.lock(accountFrom, accountTo)
 
@@ -66,14 +59,16 @@ class TransferOthersResource {
     ): Response {
 
         val operationToken =
-            operationTokenService.findByToken(UUID.fromString(token)) ?: throw NoSuchTokenException()
+            operationTokenService.findByToken(UUID.fromString(token))
+                ?: throw NoSuchTokenException()
 
         val accountFrom = accountsService.findByNumberOrThrow(operationToken.accountFrom!!)
 
         val accountTo = accountsService.findByNumberOrThrow(operationToken.accountTo!!)
 
         // Let's assume here should be implementation for identification of owner
-        if (operationToken.ownerId != request.ownerId) throw AttemptToUseStrangersAccountException()
+        if (operationToken.ownerId != request.ownerId)
+            throw AttemptToUseStrangersAccountException()
 
         accountsService.lock(accountFrom, accountTo)
 

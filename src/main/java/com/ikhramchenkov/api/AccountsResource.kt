@@ -27,7 +27,8 @@ class AccountsResource @Inject constructor(
     @UnitOfWork(transactional = false)
     fun allAvailableAccounts(@QueryParam("ownerId") ownerId: Long?): Response {
         // let's pretend it's our implementation of authentication
-        if (ownerId == null) throw BadRequestException("ownerId is not set")
+        if (ownerId == null)
+            throw BadRequestException("ownerId is not set")
 
         val accountInfoDTOs = accountsService.findByOwner(ownerId).map { account ->
             toAccountInfoDto(account, balanceService.getAccountBalance(account.accountNumber!!))
@@ -44,10 +45,12 @@ class AccountsResource @Inject constructor(
         @QueryParam("ownerId") ownerId: Long?
     ): Response {
         // let's pretend it's our implementation of authentication
-        if (ownerId == null) throw BadRequestException("ownerId is not set")
+        if (ownerId == null)
+            throw BadRequestException("ownerId is not set")
 
         val accountInfoDto = accountsService.findByNumberOrThrow(accountNumber).let { account ->
-            if (ownerId != account.ownerId) throw AttemptToUseStrangersAccountException()
+            if (ownerId != account.ownerId)
+                throw AttemptToUseStrangersAccountException()
 
             toAccountInfoDto(account, balanceService.getAccountBalance(account.accountNumber!!))
         }

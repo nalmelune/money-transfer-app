@@ -25,17 +25,17 @@ import javax.ws.rs.core.Response
 
 class AccountsResourceTest {
 
-    private val defaultAccount1 = AccountEntity(
+    val DEFAULT_ACCOUNT_1 = AccountEntity(
         accountNumber = ACCOUNT_NUMBER_1, ownerId = OWNER_ID,
         accountType = "SavingsAccount", description = "My first savings account"
     )
-    private val defaultAccount2 = AccountEntity(
+    val DEFAULT_ACCOUNT_2 = AccountEntity(
         accountNumber = ACCOUNT_NUMBER_2, ownerId = OWNER_ID,
         accountType = "SavingsAccount", description = "Family savings account"
     )
-    private val defaultClosingBalance = ClosingBalance(
+    val DEFAULT_CLOSING_BALANCE = ClosingBalance(
         accountNumber = ACCOUNT_NUMBER_1, publishDate = LocalDate.now().minusDays(1),
-        endOfPeriodBalance = DEFAULT_CLOSING_BALANCE, summaryPeriodCredit = 642300, summaryPeriodDebit = 345604
+        endOfPeriodBalance = DEFAULT_CLOSING_BALANCE_AMOUNT, summaryPeriodCredit = 642300, summaryPeriodDebit = 345604
     )
 
     @Test
@@ -62,8 +62,8 @@ class AccountsResourceTest {
 
     @Test
     fun shouldReturnTwoAccountsWithZeroBalance() {
-        accountsDao.save(defaultAccount1)
-        accountsDao.save(defaultAccount2)
+        accountsDao.save(DEFAULT_ACCOUNT_1)
+        accountsDao.save(DEFAULT_ACCOUNT_2)
 
         val result = resources.target(ACCOUNTS_PATH)
             .queryParam(OWNER_ID_PARAM, OWNER_ID)
@@ -83,9 +83,9 @@ class AccountsResourceTest {
 
     @Test
     fun shouldReturnTwoAccountsWithOneNotZeroBalance() {
-        accountsDao.save(defaultAccount1)
-        accountsDao.save(defaultAccount2)
-        closingBalanceDao.save(defaultClosingBalance)
+        accountsDao.save(DEFAULT_ACCOUNT_1)
+        accountsDao.save(DEFAULT_ACCOUNT_2)
+        closingBalanceDao.save(DEFAULT_CLOSING_BALANCE)
         balanceMovementService.saveMovementsBetweenAccounts(
             ACCOUNT_NUMBER_1,
             STRANGER_ACCOUNT_NUMBER,
@@ -104,15 +104,15 @@ class AccountsResourceTest {
 
         assertEquals(ACCOUNT_NUMBER_1, accountInfoDto1.accountNumber)
         assertEquals(ACCOUNT_NUMBER_2, accountInfoDto2.accountNumber)
-        assertEquals(DEFAULT_CLOSING_BALANCE - DEFAULT_TRANSFER_AMOUNT, accountInfoDto1.balance)
+        assertEquals(DEFAULT_CLOSING_BALANCE_AMOUNT - DEFAULT_TRANSFER_AMOUNT, accountInfoDto1.balance)
         assertEquals(0L, accountInfoDto2.balance)
     }
 
     @Test
     fun shouldReturnSingleAccountInformation() {
-        accountsDao.save(defaultAccount1)
-        accountsDao.save(defaultAccount2)
-        closingBalanceDao.save(defaultClosingBalance)
+        accountsDao.save(DEFAULT_ACCOUNT_1)
+        accountsDao.save(DEFAULT_ACCOUNT_2)
+        closingBalanceDao.save(DEFAULT_CLOSING_BALANCE)
         balanceMovementService.saveMovementsBetweenAccounts(
             ACCOUNT_NUMBER_1,
             STRANGER_ACCOUNT_NUMBER,
@@ -128,14 +128,14 @@ class AccountsResourceTest {
         val accountInfoDto = result.readEntity(AccountInfoDto::class.java)
 
         assertEquals(ACCOUNT_NUMBER_1, accountInfoDto.accountNumber)
-        assertEquals(DEFAULT_CLOSING_BALANCE - DEFAULT_TRANSFER_AMOUNT, accountInfoDto.balance)
+        assertEquals(DEFAULT_CLOSING_BALANCE_AMOUNT - DEFAULT_TRANSFER_AMOUNT, accountInfoDto.balance)
     }
 
     @Test
     fun shouldReturnEmptyAccountInformationBecauseOtherAccountOperationsDontAffectThisOne() {
-        accountsDao.save(defaultAccount1)
-        accountsDao.save(defaultAccount2)
-        closingBalanceDao.save(defaultClosingBalance)
+        accountsDao.save(DEFAULT_ACCOUNT_1)
+        accountsDao.save(DEFAULT_ACCOUNT_2)
+        closingBalanceDao.save(DEFAULT_CLOSING_BALANCE)
         balanceMovementService.saveMovementsBetweenAccounts(
             ACCOUNT_NUMBER_1,
             STRANGER_ACCOUNT_NUMBER,
@@ -156,8 +156,8 @@ class AccountsResourceTest {
 
     @Test
     fun shouldThrowIfStrangerAccountDetail() {
-        accountsDao.save(defaultAccount1)
-        accountsDao.save(defaultAccount2)
+        accountsDao.save(DEFAULT_ACCOUNT_1)
+        accountsDao.save(DEFAULT_ACCOUNT_2)
 
         val result = resources.target("$ACCOUNTS_PATH/$ACCOUNT_NUMBER_1")
             .queryParam(OWNER_ID_PARAM, STRANGER_ID)
@@ -204,7 +204,7 @@ class AccountsResourceTest {
         const val OWNER_ID_PARAM = "ownerId"
         const val OWNER_ID = 42L
         const val STRANGER_ID = 666L
-        const val DEFAULT_CLOSING_BALANCE = 43204L
+        const val DEFAULT_CLOSING_BALANCE_AMOUNT = 43204L
         const val DEFAULT_TRANSFER_AMOUNT = 3204L
         const val ACCOUNT_NUMBER_1 = "408178103000000000001"
         const val ACCOUNT_NUMBER_2 = "408178103000000000002"
