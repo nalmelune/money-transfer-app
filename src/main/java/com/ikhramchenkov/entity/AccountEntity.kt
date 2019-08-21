@@ -15,13 +15,13 @@ class AccountEntity(
     @GeneratedValue(strategy = IDENTITY)
     var id: Long? = null,
 
-    @Column(name = "account_number")
+    @Column(name = "account_number", nullable = false)
     var accountNumber: String? = null,
 
-    @Column(name = "owner_id")
+    @Column(name = "owner_id", nullable = false)
     var ownerId: Long? = null,
 
-    @Column(name = "account_type")
+    @Column(name = "account_type", nullable = false)
     var accountType: String? = null,
 
     @Column(name = "description")

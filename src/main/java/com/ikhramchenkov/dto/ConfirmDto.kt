@@ -1,9 +1,10 @@
 package com.ikhramchenkov.dto
 
 import java.util.*
+import javax.validation.constraints.NotNull
 
 data class ConfirmRequestDto(
-    val ownerId: Long
+    @NotNull val ownerId: Long
 )
 
 data class ConfirmResponseDto(

@@ -1,12 +1,13 @@
 package com.ikhramchenkov.dto
 
 import java.util.*
+import javax.validation.constraints.NotNull
 
 data class ReserveRequestDto(
-    val accountNumberFrom: String,
-    val ownerId: Long,
-    val accountNumberTo: String,
-    val amount: Long
+    @NotNull val accountNumberFrom: String,
+    @NotNull val ownerId: Long,
+    @NotNull val accountNumberTo: String,
+    @NotNull val amount: Long
 )
 
 data class ReserveResponseDto(

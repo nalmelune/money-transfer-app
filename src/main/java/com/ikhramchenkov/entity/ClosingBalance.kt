@@ -14,19 +14,19 @@ class ClosingBalance(
     @GeneratedValue(strategy = IDENTITY)
     var id: Long? = null,
 
-    @Column(name = "account_number")
+    @Column(name = "account_number", nullable = false)
     var accountNumber: String? = null,
 
-    @Column(name = "publish_date")
+    @Column(name = "publish_date", nullable = false)
     var publishDate: LocalDate? = null,
 
-    @Column(name = "end_of_period_balance")
+    @Column(name = "end_of_period_balance", nullable = false)
     var endOfPeriodBalance: Long? = null,
 
-    @Column(name = "summary_period_debit")
+    @Column(name = "summary_period_debit", nullable = false)
     var summaryPeriodDebit: Long? = null,
 
-    @Column(name = "summary_period_credit")
+    @Column(name = "summary_period_credit", nullable = false)
     var summaryPeriodCredit: Long? = null
 
 )

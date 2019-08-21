@@ -10,18 +10,18 @@ import javax.persistence.*
 )
 class OperationToken(
     @Id
-    @Column(name = "operation_token")
+    @Column(name = "operation_token", nullable = false)
     val operationToken: UUID? = null,
 
-    @Column(name = "account_from")
+    @Column(name = "account_from", nullable = false)
     val accountFrom: String? = null,
 
-    @Column(name = "account_to")
+    @Column(name = "account_to", nullable = false)
     val accountTo: String? = null,
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     val amount: Long? = null,
 
-    @Column(name = "owner_id")
+    @Column(name = "owner_id", nullable = false)
     val ownerId: Long? = null
 )

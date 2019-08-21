@@ -21,20 +21,20 @@ class BalanceMovement(
     @GeneratedValue(strategy = IDENTITY)
     var id: Long? = null,
 
-    @Column(name = "account_number")
+    @Column(name = "account_number", nullable = false)
     var accountNumber: String? = null,
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     var amount: Long? = null,
 
-    @Column(name = "transaction_type")
+    @Column(name = "transaction_type", nullable = false)
     @Enumerated(STRING)
     var transactionType: TransactionType? = null,
 
-    @Column(name = "operation_number")
+    @Column(name = "operation_number", nullable = false)
     var operationNumber: UUID? = null,
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     var createdAt: LocalDateTime? = null
 
 )
