@@ -1,8 +1,10 @@
 package com.ikhramchenkov.dto
 
 data class AccountInfoDto(
-    val description: String,
-    val accountType: String,
-    val accountName: String,
-    val balance: Long
-)
+    var accountNumber: String,
+    var accountType: String,
+    var description: String,
+    var balance: Long
+) {
+    constructor() : this("", "", "", 0)
+}

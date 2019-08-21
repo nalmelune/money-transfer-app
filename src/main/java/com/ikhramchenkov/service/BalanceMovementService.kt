@@ -6,6 +6,7 @@ import com.ikhramchenkov.entity.BalanceMovement
 import com.ikhramchenkov.enumeration.TransactionType
 import org.jvnet.hk2.annotations.Service
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import com.ikhramchenkov.enumeration.TransactionType.D as DEPOSIT
 import com.ikhramchenkov.enumeration.TransactionType.W as WITHDRAWAL
@@ -25,8 +26,9 @@ class BalanceMovementService @Inject constructor(private val balanceMovementDao:
         amount: Long
     ): UUID {
         return UUID.randomUUID().also { token ->
-            balanceMovementDao.save(toBalanceMovement(from, amount, WITHDRAWAL, token))
-            balanceMovementDao.save(toBalanceMovement(to, amount, DEPOSIT, token))
+            val now = LocalDateTime.now()
+            balanceMovementDao.save(toBalanceMovement(from, amount, WITHDRAWAL, token, now))
+            balanceMovementDao.save(toBalanceMovement(to, amount, DEPOSIT, token, now))
         }
     }
 
@@ -34,8 +36,13 @@ class BalanceMovementService @Inject constructor(private val balanceMovementDao:
         accountNumber: String,
         amount: Long,
         type: TransactionType,
-        operationNumber: UUID
+        operationNumber: UUID,
+        createdAt: LocalDateTime
     ) = BalanceMovement(
-        accountNumber = accountNumber, amount = amount, transactionType = type, operationNumber = operationNumber
+        accountNumber = accountNumber,
+        amount = amount,
+        transactionType = type,
+        operationNumber = operationNumber,
+        createdAt = createdAt
     )
 }

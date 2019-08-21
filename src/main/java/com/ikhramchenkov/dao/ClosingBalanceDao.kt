@@ -18,12 +18,16 @@ class ClosingBalanceDao @Inject constructor(sessionFactory: SessionFactory) :
         val query = criteriaQuery()
 
         query.from(entityClass).let { root ->
-            val subQuery = query.subquery(LocalDate::class.java)
-                .select(root.greatestPublishDate()).where(root.accountNumber(accountNumber))
+            val subQuery = query.subquery(LocalDate::class.java).also {
+                it.from(entityClass)
+            }
+            subQuery.select(root.greatestPublishDate()).where(root.accountNumber(accountNumber))
             query.select(root).where(root.accountNumberAndGreatestPublishDate(accountNumber, subQuery))
         }
-        return currentSession().createQuery(query).singleResult
+        return currentSession().createQuery(query).uniqueResult()
     }
+
+    fun save(closingBalance: ClosingBalance): ClosingBalance = persist(closingBalance)
 
     private fun <T> Root<T>.greatestPublishDate() =
         criteriaBuilder.greatest(get<LocalDate>("publishDate"))

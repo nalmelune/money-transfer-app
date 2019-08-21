@@ -2,6 +2,7 @@ package com.ikhramchenkov.api
 
 import com.google.inject.Inject
 import com.ikhramchenkov.dto.AccountInfoDto
+import com.ikhramchenkov.dto.AccountInfoListDto
 import com.ikhramchenkov.entity.AccountEntity
 import com.ikhramchenkov.exception.AttemptToUseStrangersAccountException
 import com.ikhramchenkov.service.AccountsService
@@ -32,7 +33,7 @@ class AccountsResource @Inject constructor(
             toAccountInfoDto(account, balanceService.getAccountBalance(account.accountNumber!!))
         }
 
-        return Response.status(OK).entity(accountInfoDTOs).build();
+        return Response.status(OK).entity(AccountInfoListDto(accountInfoDTOs)).build();
     }
 
     // Get more account details

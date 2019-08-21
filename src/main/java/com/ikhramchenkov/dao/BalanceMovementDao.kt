@@ -23,9 +23,7 @@ class BalanceMovementDao @Inject constructor(sessionFactory: SessionFactory) :
     fun getCreditSince(accountNumber: String, dateSince: LocalDate): Long =
         getByAccountNumberAndDateSinceAndTransactionType(accountNumber, dateSince, WITHDRAWAL)
 
-    fun save(balanceMovement: BalanceMovement): BalanceMovement {
-        return persist(balanceMovement)
-    }
+    fun save(balanceMovement: BalanceMovement): BalanceMovement = persist(balanceMovement)
 
     private fun getByAccountNumberAndDateSinceAndTransactionType(
         accountNumber: String,
@@ -39,7 +37,7 @@ class BalanceMovementDao @Inject constructor(sessionFactory: SessionFactory) :
                 .where(root.accountNumberEqualsAndDateAfterAndType(accountNumber, startOfNextDay(dateSince), type))
         }
 
-        return currentSession().createQuery(query).singleResult
+        return currentSession().createQuery(query).resultList.firstOrNull() ?: 0L
     }
 
     private fun <T> Root<T>.accountNumberEqualsAndDateAfterAndType(
@@ -48,8 +46,8 @@ class BalanceMovementDao @Inject constructor(sessionFactory: SessionFactory) :
         transactionType: TransactionType
     ) = criteriaBuilder.and(
         accountNumberEquals(accountNumber),
-        criteriaBuilder.greaterThan(get<LocalDateTime>("created_at"), dateTimeSince),
-        criteriaBuilder.equal(get<TransactionType>("transaction_type"), transactionType)
+        criteriaBuilder.greaterThan(get<LocalDateTime>("createdAt"), dateTimeSince),
+        criteriaBuilder.equal(get<TransactionType>("transactionType"), transactionType)
     )
 
     private fun <T> Root<T>.accountNumberEquals(

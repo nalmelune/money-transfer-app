@@ -25,12 +25,14 @@ class AccountsDao @Inject constructor(sessionFactory: SessionFactory) : Abstract
         query.from(entityClass).let { root ->
             query.select(root).where(root.accountNumberEquals(accountNumber))
         }
-        return currentSession().createQuery(query).singleResult
+        return currentSession().createQuery(query).resultList.firstOrNull()
     }
 
     fun lock(accountEntity: AccountEntity) {
         currentSession().lock(accountEntity, PESSIMISTIC_WRITE)
     }
+
+    fun save(accountEntity: AccountEntity): AccountEntity = persist(accountEntity)
 
     private fun <T> Root<T>.ownerIdEquals(
         ownerId: Long
