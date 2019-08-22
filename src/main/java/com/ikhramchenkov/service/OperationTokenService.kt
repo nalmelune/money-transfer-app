@@ -8,15 +8,15 @@ import org.jvnet.hk2.annotations.Service
 import java.util.*
 
 @Service
-class OperationTokenService {
-
-    @Inject
-    private lateinit var operationTokenDao: OperationTokenDao
-
+class OperationTokenService @Inject constructor(
+    private var operationTokenDao: OperationTokenDao
+) {
     fun saveNewToken(accountFrom: AccountEntity, accountTo: AccountEntity, requestedAmount: Long): UUID =
         UUID.randomUUID().also {
             operationTokenDao.save(
-                OperationToken(it, accountFrom.accountNumber!!, accountTo.accountNumber!!, requestedAmount, accountFrom.ownerId)
+                OperationToken(
+                    it, accountFrom.accountNumber!!, accountTo.accountNumber!!, requestedAmount, accountFrom.ownerId
+                )
             )
         }
 

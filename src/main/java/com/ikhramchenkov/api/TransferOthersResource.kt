@@ -20,8 +20,10 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.Response.Status.CREATED
+import javax.ws.rs.core.Response.Status.OK
 
 @Produces(APPLICATION_JSON)
+@Path("/")
 class TransferOthersResource @Inject constructor(
     private var accountsService: AccountsService,
     private var balanceService: BalanceService,
@@ -33,9 +35,9 @@ class TransferOthersResource @Inject constructor(
     @UnitOfWork
     fun reserveAttemptToSend(request: ReserveRequestDto): Response {
 
-        val accountFrom = accountsService.findByNumberOrThrow(request.accountNumberFrom)
+        val accountFrom = accountsService.findByNumberOrThrow(request.accountNumberFrom!!)
 
-        val accountTo = accountsService.findByNumberOrThrow(request.accountNumberTo)
+        val accountTo = accountsService.findByNumberOrThrow(request.accountNumberTo!!)
 
         // Let's assume here should be implementation for identification of owner
         if (accountFrom.ownerId != request.ownerId)
@@ -43,11 +45,11 @@ class TransferOthersResource @Inject constructor(
 
         accountsService.lock(accountFrom, accountTo)
 
-        balanceService.checkEnoughBalanceOrThrow(accountFrom.accountNumber!!, request.amount)
+        balanceService.checkEnoughBalanceOrThrow(accountFrom.accountNumber!!, request.amount!!)
 
         val operationToken = operationTokenService.saveNewToken(accountFrom, accountTo, request.amount)
 
-        return Response.status(CREATED).entity(ReserveResponseDto(operationToken, accountFrom.ownerId!!)).build()
+        return Response.status(CREATED).entity(ReserveResponseDto(operationToken, accountTo.ownerId!!)).build()
     }
 
     @POST
@@ -80,6 +82,6 @@ class TransferOthersResource @Inject constructor(
             operationToken.amount
         )
 
-        return Response.status(CREATED).entity(ConfirmResponseDto(operationUUID)).build()
+        return Response.status(OK).entity(ConfirmResponseDto(operationUUID)).build()
     }
 }

@@ -4,9 +4,13 @@ import java.util.*
 import javax.validation.constraints.NotNull
 
 data class ConfirmRequestDto(
-    @NotNull val ownerId: Long
-)
+    @NotNull val ownerId: Long?
+) {
+    constructor() : this(null)
+}
 
 data class ConfirmResponseDto(
-    val operationUUID: UUID
-)
+    val operationUUID: UUID?
+) {
+    constructor() : this(null)
+}

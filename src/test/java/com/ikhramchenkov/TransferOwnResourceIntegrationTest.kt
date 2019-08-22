@@ -1,13 +1,13 @@
 package com.ikhramchenkov
 
-import com.ikhramchenkov.AccountsResourceTest.Companion.ACCOUNT_NUMBER_1
-import com.ikhramchenkov.AccountsResourceTest.Companion.ACCOUNT_NUMBER_2
-import com.ikhramchenkov.AccountsResourceTest.Companion.DEFAULT_CLOSING_BALANCE_AMOUNT
-import com.ikhramchenkov.AccountsResourceTest.Companion.DEFAULT_TRANSFER_AMOUNT
-import com.ikhramchenkov.AccountsResourceTest.Companion.OWNER_ID
-import com.ikhramchenkov.AccountsResourceTest.Companion.OWNER_ID_PARAM
-import com.ikhramchenkov.AccountsResourceTest.Companion.STRANGER_ACCOUNT_NUMBER
-import com.ikhramchenkov.AccountsResourceTest.Companion.STRANGER_ID
+import com.ikhramchenkov.AccountsResourceIntegrationTest.Companion.ACCOUNT_NUMBER_1
+import com.ikhramchenkov.AccountsResourceIntegrationTest.Companion.ACCOUNT_NUMBER_2
+import com.ikhramchenkov.AccountsResourceIntegrationTest.Companion.DEFAULT_CLOSING_BALANCE_AMOUNT
+import com.ikhramchenkov.AccountsResourceIntegrationTest.Companion.DEFAULT_TRANSFER_AMOUNT
+import com.ikhramchenkov.AccountsResourceIntegrationTest.Companion.OWNER_ID
+import com.ikhramchenkov.AccountsResourceIntegrationTest.Companion.OWNER_ID_PARAM
+import com.ikhramchenkov.AccountsResourceIntegrationTest.Companion.STRANGER_ACCOUNT_NUMBER
+import com.ikhramchenkov.AccountsResourceIntegrationTest.Companion.STRANGER_ID
 import com.ikhramchenkov.api.TransferOwnResource
 import com.ikhramchenkov.dao.AccountsDao
 import com.ikhramchenkov.dao.BalanceMovementDao
@@ -37,7 +37,7 @@ import java.time.LocalDate
 import javax.ws.rs.client.Entity
 import javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE
 
-class TransferOwnResourceTest {
+class TransferOwnResourceIntegrationTest {
 
     val DEFAULT_ACCOUNT_1 = AccountEntity(
         accountNumber = ACCOUNT_NUMBER_1, ownerId = OWNER_ID,
@@ -54,7 +54,7 @@ class TransferOwnResourceTest {
     val DEFAULT_CLOSING_BALANCE = ClosingBalance(
         accountNumber = ACCOUNT_NUMBER_1,
         publishDate = LocalDate.now().minusDays(1),
-        endOfPeriodBalance = AccountsResourceTest.DEFAULT_CLOSING_BALANCE_AMOUNT,
+        endOfPeriodBalance = DEFAULT_CLOSING_BALANCE_AMOUNT,
         summaryPeriodCredit = 642300,
         summaryPeriodDebit = 345604
     )

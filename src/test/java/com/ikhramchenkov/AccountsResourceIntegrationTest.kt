@@ -23,7 +23,7 @@ import org.junit.Test
 import java.time.LocalDate
 import javax.ws.rs.core.Response
 
-class AccountsResourceTest {
+class AccountsResourceIntegrationTest {
 
     val DEFAULT_ACCOUNT_1 = AccountEntity(
         accountNumber = ACCOUNT_NUMBER_1, ownerId = OWNER_ID,

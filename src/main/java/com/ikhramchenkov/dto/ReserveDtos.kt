@@ -4,14 +4,18 @@ import java.util.*
 import javax.validation.constraints.NotNull
 
 data class ReserveRequestDto(
-    @NotNull val accountNumberFrom: String,
-    @NotNull val ownerId: Long,
-    @NotNull val accountNumberTo: String,
-    @NotNull val amount: Long
-)
+    @NotNull val accountNumberFrom: String?,
+    @NotNull val ownerId: Long?,
+    @NotNull val accountNumberTo: String?,
+    @NotNull val amount: Long?
+) {
+    constructor() : this(null, null, null, null)
+}
 
 data class ReserveResponseDto(
-    val token: UUID,
+    val token: UUID?,
     // there's suppose to be more user data about to who it's going to be sent, but let's simplify
-    val ownerId: Long
-)
+    val ownerId: Long?
+) {
+    constructor() : this(null, null)
+}
