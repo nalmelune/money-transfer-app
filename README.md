@@ -1,6 +1,11 @@
 # money-transfer
 
-How to start the money-transfer application
+About the project
+---
+
+This is money transfer demo project, with deadlock prevention on database level. This is the project that shows how I work with new techlogies with a tight deadline. Basically, this is how "rushed in production" code looks like.
+
+How to start the application
 ---
 
 1. Run `mvn clean install` to build your application
